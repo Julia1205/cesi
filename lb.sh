@@ -7,8 +7,8 @@ echo 'Starting Provision: lb1'
  sudo rm -rf /etc/nginx/sites-enabled/default
  sudo touch /etc/nginx/sites-enabled/default
  echo "upstream testapp {
-     server 10.0.0.11;
-     server 10.0.0.12;
+     server 192.168.33.12;
+     server 192.168.33.13;
  }
 server {
      listen 80 default_server;

@@ -14,6 +14,22 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/focal64"
 
+  config.vm.define "lb" do |lb|
+    lb.vm.network "private_network", ip: "192.168.33.11"
+    lb.vm.provision "shell", path: "lb.sh"
+  end
+    config.vm.define "web1" do |web1|
+      web1.vm.network "private_network", ip: "192.168.33.12"
+      web1.vm.provision "shell", path: "web.sh"
+    end
+      config.vm.define "web2" do |web2|
+        web2.vm.network "private_network", ip: "192.168.33.13"
+        web2.vm.provision "shell", path: "web.sh"
+      end 
+
+
+  
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
@@ -23,7 +39,7 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -32,7 +48,7 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -70,8 +86,14 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
-   config.vm.provision "shell", inline: <<-SHELL
-     apt-get update
-     apt-get install -y apache2
-   SHELL
+  #  config.vm.provision "shell", inline: <<-SHELL
+    #  apt-get update
+    #  apt-get install -y apache2
+
+    # sudo rm /var/www/html/index.html
+    # sudo echo "Bonjour Aurélien" > /var/www/html/index.html
+    config.vm.provision "shell", path: "web.sh"
+
+
+  #  SHELL
 end
